@@ -81,7 +81,7 @@ function App() {
         outputIndex: t2.inputs[0].sourceOutputIndex,
         inputIndex: 0,
         satoshis: t2.inputs[0].sourceTransaction!.outputs[t2.inputs[0].sourceOutputIndex].satoshis!,
-        address: addr,
+        address: bsvAddr,
         // sigHashType: 0x01,
         // sigHashType: 65,
       },
