@@ -8,6 +8,7 @@ import {
   TransactionOutput,
   UnlockingScript,
   Utils,
+  Script,
 } from '@bsv/sdk';
 import { SignatureRequest, useYoursWallet } from 'yours-wallet-provider';
 
@@ -31,6 +32,8 @@ function App() {
     if (!pubKeys?.identityPubKey || !utxoList?.length || !addressList?.identityAddress) {
       throw new Error('Something went wrong');
     }
+    
+    console.log({ addressToUseInSignatureRequest: Utils.toBase58Check(Script.fromHex(utxoList[0].script).chunks[2].data as number[]) })
 
     const pubKey = PublicKey.fromString(pubKeys.identityPubKey);
 
@@ -57,6 +60,7 @@ function App() {
       },
       new P2PKH().unlock(PrivateKey.fromRandom())
     );
+
 
     const output0: TransactionOutput = {
       lockingScript: new P2PKH().lock(bsvAddr),
