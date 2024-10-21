@@ -94,7 +94,13 @@ function App() {
 
     console.log({ sigResponses });
 
-    t2.inputs[0].unlockingScript = UnlockingScript.fromHex(sigResponses![0].sig);
+    const u = new UnlockingScript();
+    u.writeBin(Utils.toArray(sigResponses?.[0]?.sig, 'hex'));
+    u.writeBin(Utils.toArray(sigResponses?.[0]?.pubKey, 'hex'));
+
+    t2.inputs[0].unlockingScript = u
+    
+    
 
     console.log('t2', t2.toHex());
   };
