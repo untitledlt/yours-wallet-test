@@ -7,6 +7,7 @@ import {
   Transaction,
   TransactionOutput,
   UnlockingScript,
+  Utils,
 } from '@bsv/sdk';
 import { SignatureRequest, useYoursWallet } from 'yours-wallet-provider';
 
@@ -19,6 +20,8 @@ function App() {
     if (!wallet?.isReady) {
       throw new Error('Wallet is not ready');
     }
+
+    await wallet.connect();
 
     const utxoList = await wallet.getPaymentUtxos();
     const pubKeys = await wallet.getPubKeys();
@@ -94,7 +97,13 @@ function App() {
 
     console.log({ sigResponses });
 
-    t2.inputs[0].unlockingScript = UnlockingScript.fromHex(sigResponses![0].sig);
+    const u = new UnlockingScript();
+    u.writeBin(Utils.toArray(sigResponses?.[0]?.sig, 'hex'));
+    u.writeBin(Utils.toArray(sigResponses?.[0]?.pubKey, 'hex'));
+
+    t2.inputs[0].unlockingScript = u
+    
+    
 
     console.log('t2', t2.toHex());
   };
