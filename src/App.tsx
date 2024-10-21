@@ -21,6 +21,8 @@ function App() {
       throw new Error('Wallet is not ready');
     }
 
+    await wallet.connect();
+
     const utxoList = await wallet.getPaymentUtxos();
     const pubKeys = await wallet.getPubKeys();
     const network = await wallet.getNetwork();
