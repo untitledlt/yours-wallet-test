@@ -7,6 +7,7 @@ import {
   Transaction,
   TransactionOutput,
   UnlockingScript,
+  Utils,
 } from '@bsv/sdk';
 import { SignatureRequest, useYoursWallet } from 'yours-wallet-provider';
 
