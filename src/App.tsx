@@ -19,10 +19,10 @@ function App() {
 
   useEffect(() => {
     if (!wallet?.on) return;
-    wallet.on('switchAccount', () => {
-      console.log('switchAccount');
-      // handle switching or creating a new account for the user within your app
-    });
+    // wallet.on('switchAccount', () => {
+    //   console.log('switchAccount');
+    //   // handle switching or creating a new account for the user within your app
+    // });
 
     wallet.on('signedOut', () => {
       console.log('signedOut');
@@ -73,6 +73,7 @@ function App() {
       },
       new P2PKH().unlock(PrivateKey.fromRandom())
     );
+    input.unlockingScript = new UnlockingScript();
 
     const output0: TransactionOutput = {
       lockingScript: new P2PKH().lock(bsvAddr),
@@ -83,11 +84,10 @@ function App() {
       change: true,
     };
 
-    input.unlockingScript = new UnlockingScript();
-
     const tx = new Transaction(1, [input], [output0, output1]);
     await tx.fee();
     const unsignedTx = tx.toHexEF();
+    console.log('unsignedTx', unsignedTx);
 
     const t2 = Transaction.fromHexEF(unsignedTx);
 
@@ -97,7 +97,8 @@ function App() {
         outputIndex: t2.inputs[0].sourceOutputIndex,
         inputIndex: 0,
         satoshis: t2.inputs[0].sourceTransaction!.outputs[t2.inputs[0].sourceOutputIndex].satoshis!,
-        address: addressToUseInSignatureRequest,
+        // address: addressToUseInSignatureRequest,
+        address: addressList.bsvAddress,
       },
     ];
 
@@ -117,7 +118,7 @@ function App() {
 
     t2.inputs[0].unlockingScript = u;
 
-    console.log('t2', t2.toHex());
+    console.log('signedTx', t2.toHex());
   };
 
   return <button onClick={test}>Test</button>;
